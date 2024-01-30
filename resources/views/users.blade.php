@@ -4,7 +4,5 @@
             Users
         </h2>
     </x-slot>
-
-    <livewire:users-table />
-
+    @livewire('users-table')
 </x-app-layout>

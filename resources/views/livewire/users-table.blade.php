@@ -1,7 +1,9 @@
 <div class="py-12">
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
         <form wire:submit="search">
-            <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+            <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
+                Search
+            </label>
             <div class="relative">
                 <div class="absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3.5">
                     <svg class="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -29,28 +31,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse ($users as $user)
-                    <tr wire:key="{{ $user->id }}">
-                        <td class="px-10 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            <div class="text-base font-semibold">{{ $user->name }}</div>
-                            <div class="font-normal text-gray-500">{{ $user->email }}</div>
-                        </td>
-                        <td class="px-10 py-4 text-gray-700 whitespace-nowrap dark:text-gray-200">
-                            {{ str($user->job)->words(2) }}
-                        </td>
-                        <td class="px-10 py-4 text-gray-700 whitespace-nowrap dark:text-gray-200">
-                            {{ str($user->address)->words(5) }}
-                        </td>
-                        <td class="px-10 py-4 whitespace-nowrap">
-                            <span class="inline-flex -space-x-px overflow-hidden bg-white border rounded-md shadow-sm dark:border-gray-800 dark:bg-gray-700">
-                                <button class="inline-block px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50 focus:relative dark:text-blue-500 dark:hover:bg-blue-900 dark:hover:text-blue-100">
-                                    View
-                                </button>
-                                <button wire:click="delete()" class="inline-block px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 focus:relative dark:text-red-500 dark:hover:bg-red-900 dark:hover:text-red-100">
-                                    Delete
-                                </button>
-                            </span>
-                        </td>
-                    </tr>
+                    <livewire:user-list :$user :key="$user->id" />
                     @empty
                     <tr>
                         <td class="px-10 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -66,4 +47,29 @@
         </div>
     </div>
     <!-- ---------------------------------- -->
+    @script
+    <script>
+        $wire.on('delete:confirm', (event) => {
+            Swal.fire({
+                    title: `${event.userName} will be delete`,
+                    text: "Are u sure ?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $wire.deleteUser(event.userId)
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        });
+                    }
+                })
+        })
+    </script>
+    @endscript
 </div>
