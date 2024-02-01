@@ -50,22 +50,27 @@
     @script
     <script>
         $wire.on('delete:confirm', (event) => {
+            const words = event.userName.trim().split(' ');
+            const firstTwoWords = words.slice(0, 2).join(' ');
             Swal.fire({
-                    title: `${event.userName} will be delete`,
-                    text: "Are u sure ?",
+                    title: `${firstTwoWords} will be delete`,
+                    text: "Are u sure want to delete this user ?",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
                     cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!"
+                    confirmButtonText: "Yes, delete it!",
+                    allowEscapeKey: false
                 })
                 .then((result) => {
                     if (result.isConfirmed) {
                         $wire.deleteUser(event.userId)
                         Swal.fire({
-                            title: "Deleted!",
-                            text: "Your file has been deleted.",
-                            icon: "success"
+                            title: "User has been deleted ",
+                            icon: "success",
+                            timer: 1000,
+                            showConfirmButton: false,
+                            allowEscapeKey: false
                         });
                     }
                 })

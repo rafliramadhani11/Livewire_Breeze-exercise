@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\UserShow;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
@@ -24,6 +25,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/users/{user}', [UserController::class, 'show'])
+        ->name('user.show');
     Route::get('/users', [UserController::class, 'index'])
         ->name('users');
     Route::get('/profile', [ProfileController::class, 'edit'])
